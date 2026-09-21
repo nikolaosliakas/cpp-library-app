@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
 
-
-
 project(LibrarySystem CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -40,42 +38,31 @@ set(CROW_INSTALL OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(Crow)
 
 # ------------------------------------------------------------------------------
-# 2. Fetch Apache Arrow / Parquet
+# 2. Find Apache Arrow / Parquet (installed via Homebrew)
 # ------------------------------------------------------------------------------
-set(ARROW_WITH_SNAPPY OFF CACHE BOOL "" FORCE)
-set(ARROW_COMPUTE OFF CACHE BOOL "" FORCE)
-set(ARROW_DATASET OFF CACHE BOOL "" FORCE)
-set(ARROW_SIMD_LEVEL "NONE" CACHE STRING "" FORCE)
-
-set(ARROW_DEPENDENCY_SOURCE "BUNDLED" CACHE STRING "" FORCE)
-set(ARROW_DEPENDENCY_USE_SHARED OFF CACHE BOOL "" FORCE)
-
-FetchContent_Declare(
-        Arrow
-        GIT_REPOSITORY https://github.com/apache/arrow.git
-        GIT_TAG        apache-arrow-17.0.0
-        SOURCE_SUBDIR  cpp
-)
-
-set(ARROW_PARQUET ON CACHE BOOL "" FORCE)
-set(ARROW_BUILD_STATIC ON CACHE BOOL "" FORCE)
-set(ARROW_BUILD_SHARED OFF CACHE BOOL "" FORCE)
-set(ARROW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(ARROW_BUILD_INTEGRATION OFF CACHE BOOL "" FORCE)
-set(ARROW_BUILD_UTILITIES OFF CACHE BOOL "" FORCE)
-
-FetchContent_MakeAvailable(Arrow)
+find_package(Arrow REQUIRED)
+find_package(Parquet REQUIRED)
 
 # ------------------------------------------------------------------------------
 # 3. Executable Setup
 # ------------------------------------------------------------------------------
+# A. Header-Only / Interface Library
+add_library(utils INTERFACE
+        src/utils/Schemas.cpp)
+target_include_directories(utils INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/src/utils)
+
+# B. Static Compiled Library (e.g., Database handling)
+add_library(database_handling STATIC
+        src/database_handling/Database.cpp
+)
+target_include_directories(database_handling PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/database_handling)
+target_link_libraries(database_handling PRIVATE Arrow::arrow_shared Parquet::parquet_shared)
+
 add_executable(LibrarySystem src/main.cpp)
 
 target_link_libraries(LibrarySystem
         PRIVATE
         Crow::Crow
-        parquet_static
-        arrow_static
 )
 
 # ------------------------------------------------------------------------------
