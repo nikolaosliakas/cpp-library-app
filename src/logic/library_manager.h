@@ -2,9 +2,9 @@
 #ifndef LIBRARY_MANAGER_H
 #define LIBRARY_MANAGER_H
 
-class Library {
+class LibraryManager {
 public:
-  Library() = default;
+  LibraryManager() = default;
 
 
 };
