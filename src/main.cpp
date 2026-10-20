@@ -1,8 +1,9 @@
 #include <iostream>
 
 
-int main(){
+int main(int argc, char *argv[]) {
 
-    std::cout << "Overengineered - start!" << '\n';
+    std::cout << "Library App starting up!" << '\n';
+
     return 0;
 }
