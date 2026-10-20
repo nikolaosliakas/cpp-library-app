@@ -22,7 +22,7 @@ add_executable(LibraryApp ${SOURCES})
 target_include_directories(LibraryApp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(LibraryApp PRIVATE CLI11::CLI11)
 # Automatically copies the CSV assets folder
-# to the build output directory so your code can easily load books.csv relative to the executable
+# to the build output directory so your code can easily load books.csv.csv relative to the executable
 # TODO: review this setup could be a lot to keep in memory.
 add_custom_command(
         TARGET LibraryApp POST_BUILD

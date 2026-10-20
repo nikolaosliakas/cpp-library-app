@@ -7,9 +7,11 @@
 class MenuCLI {
 private:
   CLI::App app_;
+  LibraryManager& lib_manager_;
+  std::string search_title_;
   void add_options();
 public:
-  MenuCLI(LibraryManager& manager);
+  explicit MenuCLI(LibraryManager& manager);
   int run(int argc, char** argv);
 };
 
