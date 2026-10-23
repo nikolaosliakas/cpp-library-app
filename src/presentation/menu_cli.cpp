@@ -24,6 +24,7 @@ int MenuCLI::run(int argc, char **argv) {
 
   // Check if option was passed on CLI
   if (app_.count("--search") > 0) {
+    lib_manager_.reading_data();
     std::cout << "[CLI] Searching for title: " << search_title_ << "\n";
     // lib_manager_.search_by_title(search_title_);
   }

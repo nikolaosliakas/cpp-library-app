@@ -12,6 +12,9 @@ set(SOURCES
         # Storage Layer
         storage/csv_handler.cpp
         storage/csv_handler.h
+        storage/rapidcsv.h
+        logic/request.h
+        storage/response.h
 )
 
 # Create the main executable target
