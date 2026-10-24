@@ -13,8 +13,11 @@ set(SOURCES
         storage/csv_handler.cpp
         storage/csv_handler.h
         storage/rapidcsv.h
-        logic/request.h
-        storage/response.h
+        logic/clock.h
+        logic/messages.h
+        storage/database.h
+        storage/database.cpp
+        storage/schemas.h
 )
 
 # Create the main executable target
