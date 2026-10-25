@@ -1,63 +1,71 @@
 
 #ifndef LIBRARYSYSTEM_DATABASE_H
 #define LIBRARYSYSTEM_DATABASE_H
+#include "logic/library_manager.h"
 
-Msg requestMsg;
-requestMsg.msgType = Msg::Request;
-requestMsg.logicClockTick = 42;
-requestMsg.payload = RequestPayload{ "SELECT * FROM users;", 100 }; // Assigns the request payload
 #include <string>
-#include <vector>
 #include <variant>
 
 
-// Request data from database
+/**
+ * ============================================
+ *        Database Requests
+ * ============================================
+ */
 // Request Books by author, title, isbn TODO: expand this
 struct BookRequest {
   enum BookLookupBy {
-
+    AUTHOR,
+    TITLE,
+    ISBN
   };
+  // TODO: expand this to vector for union of lookups
+  BookLookupBy lookupBy;
+  std::string lookupVal;
+  // check for substring or for whole string match
+  bool isPartial;
+
 };
 
-struct RequestPayload {
+struct MemberRequest{}; // TODO: membership lookup
+struct StaffRequest{}; // TODO: staff lookup
 
-  using Request = std::variant<BookRequest, MemberRequest, StaffRequest>;
-  Request request;
-  int maxRows;
+struct DBRequest {
+  int logicClockTick;
+  using RequestType = std::variant<BookRequest, MemberRequest, StaffRequest>;
+  RequestType requestType;
 };
-
+/**
+ * ============================================
+ *        Database Responses
+ * ============================================
+ */
 // give data from database
-struct ResponsePayload {
+struct DBResponse {
+  int logicClockTick;
   bool success;
   // vector containing book records.
-  // std::vector<BookRecord> rows;
-  std::string errorMessage;
+  std::vector<std::string> rows;
+  std::string errorMessage; // should be an optional based on success.
 };
 
-// 3. Data specific to general Information/Log messages
+ // Database Status Information - to give to logic - delete if unused.
 struct InfoPayload {
   std::string messageText;
 };
-void processMessage(const Msg& msg) {
-  // Optional: you can double-check with msg.msgType,
-  // but std::visit handles the payload type automatically.
 
-  std::visit([](const auto& p) {
-      using T = std::decay_t<decltype(p)>;
 
-      if constexpr (std::is_same_v<T, RequestPayload>) {
-          // Compiler knows 'p' is a RequestPayload here
-          printf("Executing Query: %s\n", p.sqlQuery.c_str());
-      }
-      else if constexpr (std::is_same_v<T, ResponsePayload>) {
-          // Compiler knows 'p' is a ResponsePayload here
-          printf("Response Success: %s, Rows returned: %zu\n",
-                 p.success ? "true" : "false", p.rows.size());
-      }
-      else if constexpr (std::is_same_v<T, InfoPayload>) {
-          // Compiler knows 'p' is an InfoPayload here
-          printf("Info: %s\n", p.messageText.c_str());
-      }
-  }, msg.payload);
-}
+class Database {
+public:
+  explicit Database() = default;
+
+  // receive request for data - may expand for multiple library terminals?
+  DBResponse processRequest(const DBRequest& request);
+private:
+  DBResponse findBook(BookRequest req);
+  DBResponse findMember(MemberRequest req);
+  DBResponse findStaff(StaffRequest req);
+
+};
+
 #endif // LIBRARYSYSTEM_DATABASE_H

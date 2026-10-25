@@ -14,7 +14,6 @@ set(SOURCES
         storage/csv_handler.h
         storage/rapidcsv.h
         logic/clock.h
-        logic/messages.h
         storage/database.h
         storage/database.cpp
         storage/schemas.h

@@ -2,6 +2,7 @@
 #ifndef LIBRARY_MANAGER_H
 #define LIBRARY_MANAGER_H
 
+#include "storage/database.h"
 #include "storage/rapidcsv.h"
 #include<string>
 class LibraryManager {
@@ -11,7 +12,7 @@ private:
 
 public:
   LibraryManager() = default;
-  int reading_data();
+  int requestData(DBRequest);
 
 };
 

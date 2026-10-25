@@ -2,7 +2,7 @@
 #include "library_manager.h"
 
 
-int LibraryManager::reading_data() {
+int LibraryManager::requestData() {
   // Load CSV file (assumes first row contains column headers)
   rapidcsv::Document doc("data/books.csv");
 
