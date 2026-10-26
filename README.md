@@ -1,27 +1,31 @@
 # cpp-library-app
-Create a functioning library - stored parquet files
+A library management system.
+
+## Architecture
+
+### Presentation
+CLI based interface
+### Logic
+Actions that are expressed as programs. This is where the design of how the library functions is placed.
+### Storage
+Receives requests for data and responds to those requests.
+Separates the physical type of data (SQLite, CSV, Parquet etc.) from the logic layer requesting data.
+
+Current type: SQLite
 
 
-## Prerequisites:
-1. Install Apache Arrow for Parquet
-   ```shell
-    brew install apache-arrow
-    ```
-2. 
-## Books (Dimension)
- - Schema {id: int, bookTitle: str, author_name: vector , publishing_year: int, publisher, isbn: str}
 
-## Inventory (Fact)
-- Each item of a book contained and its status ex. 2 copies of ToKillMockingbird - 1 on loan with custID
-  - Schema {id: long long, status: enum (loaned, late, in_stock, ordered, lost, destroyed), book_id: int}
+## Setup
 
-## Loan Policies (Dimension)
-- Small table of policies that loans can be on
-- Schema {id: int, loan_pol_name: str, loan_pol_days: (-1, 14, 7) etc.
-- 
-## Loans (Fact)
-- running event of when a book was taken out on loan
-  - Schema {id: long long, book_id: int, loan_date_start: datetime, loan_date_policy: pol1, loan_due: date (calc'd), member_id: int
+1. Create database with initial objects (you will need sqlite installed):
+```bash
+# create and populate books table
+sqlite ~/src/storage/data/library_system.db < books_init.sql
+```
 
-## Members (Dimension)
-- Schema {id: int, member_forenames: string, member_lastname: str, date_of_birth: date, relationship_with: member_ids (parent/children), 
+## Log
+
+1. 20261026 - Before this date, architecture was envisioning many libraries that would need to share a database. As such they would request and get a logical clock tick and send the request to a database object. That object would process requests maintaining order and preventing WR,RW and WW failures (ex. Waiting for requests )
+
+
+

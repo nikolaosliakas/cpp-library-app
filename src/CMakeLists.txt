@@ -10,10 +10,6 @@ set(SOURCES
         logic/library_manager.h
 
         # Storage Layer
-        storage/csv_handler.cpp
-        storage/csv_handler.h
-        storage/rapidcsv.h
-        logic/clock.h
         storage/database.h
         storage/database.cpp
         storage/schemas.h
