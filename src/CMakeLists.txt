@@ -17,18 +17,10 @@ set(SOURCES
 
 # Create the main executable target
 add_executable(LibraryApp ${SOURCES})
-
+find_package(SQLite3 REQUIRED)
 # Tell the compiler to look inside 'src/' for includes
 # This allows clean includes like: #include "logic/library_manager.h"
 target_include_directories(LibraryApp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(LibraryApp PRIVATE CLI11::CLI11)
-# Automatically copies the CSV assets folder
-# to the build output directory so your code can easily load books.csv.csv relative to the executable
-# TODO: review this setup could be a lot to keep in memory.
-add_custom_command(
-        TARGET LibraryApp POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/storage/data
-        $<TARGET_FILE_DIR:LibraryApp>/data
-        COMMENT "Copying CSV data to build directory..."
-)
+target_link_libraries(LibraryApp PRIVATE SQLite::SQLite3)
+

@@ -3,15 +3,15 @@
 #define LIBRARY_MANAGER_H
 
 #include "storage/database.h"
-#include<string>
+
 class LibraryManager {
 private:
   // std::vector<Record> readFromDB(Request req);
 
-
+  Database& database_;
 public:
-  LibraryManager() = default;
-  int requestData(DBRequest);
+  explicit LibraryManager(Database& database);
+
 
 };
 

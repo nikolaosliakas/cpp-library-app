@@ -10,7 +10,8 @@ struct BookRecord {
   int isbn;
   int pub_year;
   std::string publisher;
-  std::unordered_map<std::string, std::string> misc;
+  // std::unordered_map<std::string, std::string> misc;
+  std::string misc; // contains JSON
 };
 
 #endif // LIBRARYSYSTEM_SCHEMAS_H

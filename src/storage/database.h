@@ -1,11 +1,11 @@
 
 #ifndef LIBRARYSYSTEM_DATABASE_H
 #define LIBRARYSYSTEM_DATABASE_H
-#include "logic/library_manager.h"
-
 #include <string>
 #include <variant>
 #include <vector>
+#include "sqlite3.h"
+
 
 /**
  * ============================================
@@ -31,7 +31,7 @@ struct MemberRequest{}; // TODO: membership lookup
 struct StaffRequest{}; // TODO: staff lookup
 
 struct DBRequest {
-  int logicClockTick;
+
   using RequestType = std::variant<BookRequest, MemberRequest, StaffRequest>;
   RequestType requestType;
 };
@@ -42,7 +42,7 @@ struct DBRequest {
  */
 // give data from database
 struct DBResponse {
-  int logicClockTick;
+
   bool success;
   // vector containing book records.
   std::vector<std::string> rows;
@@ -56,16 +56,21 @@ struct InfoPayload {
 
 
 class Database {
-public:
-  explicit Database() = default;
+private:
+  // pointer to database
+  sqlite3* db_;
 
+public:
+  Database();
+  ~Database();
   // receive request for data - may expand for multiple library terminals?
   DBResponse processRequest(const DBRequest& request);
 private:
   DBResponse findBook(BookRequest req);
   DBResponse findMember(MemberRequest req);
   DBResponse findStaff(StaffRequest req);
-
+  void lookupBookByAuthor(DBResponse& db_response, const std::string& value,
+                          bool isPartial);
 };
 
 #endif // LIBRARYSYSTEM_DATABASE_H
