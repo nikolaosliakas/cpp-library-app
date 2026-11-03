@@ -8,13 +8,31 @@ CLI based interface
 ### Logic
 Actions that are expressed as programs. This is where the design of how the library functions is placed.
 ### Storage
-Receives requests for data and responds to those requests.
+
 Separates the physical type of data (SQLite, CSV, Parquet etc.) from the logic layer requesting data.
 
 Current type: SQLite
 
+## Feature Structure
 
+A CLI based tool that can be used by staff to manage the inventory, members and loan service.
 
+1. Search
+2. Loan Service:
+   1. Book
+      - reserve a book
+      - checkout a book 
+      - Add Delete from book inventory
+3. Member Service:
+     - Add/Remove a member
+     -  Update member details
+4. Staff Service:
+    - Add/Remove/Update staff
+    - Grant/Remove permissions for library system
+    - Hierarchy
+
+Eventual state is where multiple library locations exist, with their own inventory and staff.
+      
 ## Setup
 
 1. Create database with initial objects (you will need sqlite installed):
