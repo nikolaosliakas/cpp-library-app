@@ -13,6 +13,7 @@ set(SOURCES
         storage/database.h
         storage/database.cpp
         storage/schemas.h
+        logic/search.h
 )
 
 # Create the main executable target
