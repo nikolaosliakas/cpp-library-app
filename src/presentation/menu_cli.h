@@ -12,9 +12,11 @@ private:
   BookQuery book_query_;
   struct BookSearchParams {
     std::string author;
+    std::string author_partial;
     std::string title;
+    std::string title_partial;
     std::string isbn;
-    bool partial;
+
   } book_params_;
 
   void add_options();

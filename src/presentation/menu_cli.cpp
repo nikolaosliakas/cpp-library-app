@@ -27,30 +27,41 @@ void MenuCLI::add_search_options() {
   books_cmd->add_option("-t,--title", book_params_.title, "Search by title");
   books_cmd->add_option("-i,--isbn", book_params_.isbn, "Search by isbn");
 
-  books_cmd->add_flag("-p,--partial", book_params_.partial, "Add to book search option for partial matching!");
+  books_cmd->add_option("--author-partial", book_params_.author_partial, "Search by author, partial search!");
+  books_cmd->add_option("--title-partial", book_params_.title_partial, "Search by title, partial search");
 
 
-  //
+
+
   // if (book_params_.author.empty() && book_params_.title.empty() && book_params_.isbn.empty()) {
   //   throw CLI::ValidationError("search books", "specify at lease one search field!");
   // }
-  // if (book_params_.partial &&!book_params_.isbn.empty()) {
-  //   throw CLI::ValidationError(
-  //       "--partial", "cannot be combined with --isbn (ISBN is always exact)");
-  // }
+  if (!book_params_.author.empty() && !book_params_.author_partial.empty()) {
+    throw CLI::ValidationError("search books", "You cannot combine a whole author search with a partial author search. Please select one!");
+  }
+  if (!book_params_.title.empty() && !book_params_.title_partial.empty()) {
+    throw CLI::ValidationError("search books", "You cannot combine a whole title search with a partial title search. Please select one!");
+  }
+
 
   books_cmd->callback([&]() {
     std::cout << "Executing Book Search...\n";
     if (!book_params_.author.empty()) {
-      std::cout << "  Author: " << book_params_.author << "(" <<(book_params_.partial ? "Partial": "Exact") << ")\n";
-
+      std::cout << "  Author: " << book_params_.author << "\n";
     }
     if (!book_params_.title.empty()) {
-      std::cout << "  Title: " << book_params_.title << "(" <<(book_params_.partial ? "Partial": "Exact") << ")\n";
+      std::cout << "  Title: " << book_params_.title << "\n";
     }
     if (!book_params_.isbn.empty()) {
       std::cout << "  ISBN: " << book_params_.isbn << "\n";
     }
+    if (!book_params_.author_partial.empty()) {
+      std::cout << "  Partial Author: " << book_params_.author_partial << "\n";
+    }
+    if (!book_params_.title_partial.empty()) {
+      std::cout << "  Partial Title: " << book_params_.title_partial << "\n";
+    }
+
   });
 
 }
@@ -58,27 +69,19 @@ void MenuCLI::add_options() {
   app_.description("Library System App");
   app_.require_subcommand(1); // requires top level command like search!
   add_search_options();
-
-
 }
 
 int MenuCLI::run(int argc, char **argv) {
+
   add_options();
 
-  try {
-    app_.parse(argc, argv);
-  } catch (const CLI::ParseError &e) {
-    return app_.exit(e);
-  }
+    try {
+      app_.parse(argc, argv);
+    } catch (const CLI::ParseError &e) {
+      return app_.exit(e);
+    }
 
-  // // Check if option was passed on CLI
-  // if (app_.count("--search") > 0) {
-  //   //
-  //   // std::cout << "[CLI] Searching for title: " << search_title_ << "\n";
-  //   // lib_manager_.search_by_title(search_title_);
-  //   std::cout << "[CLI] Searching for title: " << search_author_ << "\n";
-  //   lib_manager_.search_by_title(search_title_);
-  // }
+
 
   return 0;
 }
