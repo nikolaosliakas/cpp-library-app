@@ -18,7 +18,7 @@ enum class BookSearchField {
   ISBN
 };
 
-struct BookSearchPayload {
+struct BookSearchFieldFilter {
   BookSearchField field;
   std::string value;
   bool partial = false;
@@ -26,7 +26,7 @@ struct BookSearchPayload {
 struct BookQuery{
   // TODO: convert to logical clock when dist system has settled.
   std::chrono::time_point<std::chrono::system_clock> t_point_sent;
-  std::vector<BookSearchPayload> payload;
+  std::vector<BookSearchFieldFilter> filters;
 };
 
 struct MemberRequest{}; // TODO: membership lookup
