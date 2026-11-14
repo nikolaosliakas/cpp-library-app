@@ -14,6 +14,7 @@ set(SOURCES
         storage/database.cpp
         storage/schemas.h
         logic/search.h
+        logic/error.h
 )
 
 # Create the main executable target

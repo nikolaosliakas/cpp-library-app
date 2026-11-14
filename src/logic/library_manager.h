@@ -3,8 +3,11 @@
 #define LIBRARY_MANAGER_H
 
 #include "search.h"
+#include "error.h"
 
 #include "storage/database.h"
+
+#include <expected>
 #include <vector>
 
 class LibraryManager {
@@ -14,8 +17,8 @@ private:
   Database& database_;
 public:
   explicit LibraryManager(Database& database);
-  //
-  // std::expected<std::vector<BookSummary>>,LibraryError> search_books(BookQuery title);
+
+  std::expected<std::vector<BookSummary>,LibraryError> search_books(BookQuery);
 
 };
 

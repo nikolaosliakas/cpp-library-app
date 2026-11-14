@@ -2,10 +2,10 @@
 #include <string>
 
 #include "presentation/menu_cli.h"
+#include <expected>
 
 MenuCLI::MenuCLI(LibraryManager& manager)
     : lib_manager_(manager) {}
-
 void MenuCLI::add_search_options() {
   /* ------------------------------------------------------------
  * L1 - "search cmd"
@@ -17,7 +17,7 @@ void MenuCLI::add_search_options() {
   add_book_search(search_cmd);
 
 }
-std::vector<BookSearchFieldFilter> MenuCLI::build_book_filters() {
+std::vector<BookSearchFieldFilter> MenuCLI::build_book_filters() const {
   std::vector<BookSearchFieldFilter> filters;
   if (!book_params_.author.empty())
     filters.push_back({BookSearchField::AUTHOR, book_params_.author, false});
@@ -35,6 +35,12 @@ void MenuCLI::run_book_search() {
   std::cout << "Executing Book Search...\n";
   // TODO:validate book params like isbn;
   auto filters = build_book_filters();
+  auto result = lib_manager_.search_books(filters);
+  if (!result) {
+    std::cerr << "Error: " << result.error().message << '\n';
+    return;
+  }
+  // print_book_table(std::cout, *result);
 }
 void MenuCLI::add_book_search(CLI::App* parent) {
     auto* books_cmd = parent->add_subcommand("books", "Search books!");

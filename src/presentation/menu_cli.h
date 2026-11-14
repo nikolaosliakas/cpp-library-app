@@ -22,7 +22,7 @@ private:
   void add_options();
   void add_search_options();
   void add_book_search(CLI::App*);
-  std::vector<BookSearchFieldFilter> build_book_filters();
+  std::vector<BookSearchFieldFilter> build_book_filters() const;
   void run_book_search();
 public:
   explicit MenuCLI(LibraryManager& manager);

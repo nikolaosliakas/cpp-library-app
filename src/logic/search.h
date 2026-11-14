@@ -29,6 +29,7 @@ struct BookQuery{
   std::vector<BookSearchFieldFilter> filters;
 };
 
+
 struct MemberRequest{}; // TODO: membership lookup
 struct StaffRequest{}; // TODO: staff lookup
 
@@ -43,13 +44,26 @@ struct SearchQuery {
  * ============================================
  */
 // give data from database
-struct DBResponse {
+struct BookSummary {
+  int isbn;
+  std::string title;
+  std::string author;
+  int copies_available;
+};
+struct MemberSummary{};
+struct StaffSummary{};
 
+struct DBResponse {
   bool success;
   // vector containing book records.
-  std::vector<std::string> rows;
+  using ResponseType = std::variant<BookSummary, MemberSummary, StaffSummary>;
+  std::vector<ResponseType> rows;
   std::string errorMessage; // should be an optional based on success.
 };
+
+
+
+
 
 // Database Status Information - to give to logic - delete if unused.
 struct InfoPayload {
